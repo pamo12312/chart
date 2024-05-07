@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bar Chart with Data Input</title>
+</head>
+<body>
+<div class="flexing">
+  <div style="width: 800px; height: 600px; margin-bottom: 20px;">
+    <canvas id="barChart"></canvas>
+  </div>
+</div>
+<input type="number" id="dataInput">
+<button id="addDataBtn">Add Data</button>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  function createChart(canvasId, chartType, labels, data) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    return new Chart(ctx, {
+      type: chartType,
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Data',
+          data: data,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  let barLabels = ['jj' , 'jjj'];
+  let barData = [90, 10];
+  let barChart = createChart('barChart', 'bar', barLabels, barData);
+  function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.update();
+  }
+  document.getElementById('addDataBtn').addEventListener('click', function() {
+    const input = document.getElementById('dataInput');
+    const value = parseInt(input.value);
+    if (!isNaN(value)) {
+      addData(barChart, `Column ${barData.length + 1}`, value);
+      input.value = '';
+    }
+  });
+</script>
+</body>
+</html>
